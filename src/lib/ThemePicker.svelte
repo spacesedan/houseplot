@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Theme } from "./types";
-    import { theme } from "./providers/theme";
+    import { theme } from "./store";
     import { onMount } from "svelte";
 
     let themes: Theme[] = [
