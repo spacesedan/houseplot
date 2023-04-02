@@ -8,7 +8,8 @@
 
     let maxZoom = 20;
     let subdomains = "abcd";
-    let attribution =                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    let attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
     onMount(async () => {
         let darkTheme: TileLayer = L.tileLayer(
@@ -42,21 +43,19 @@
         );
 
         $map = L.map(mapElement).setView(initialView, 13);
-        $map.addLayer(darkTheme)
-        $map.addLayer(lightTheme)
-        $map.addLayer(voyagerTheme)
+        $map.addLayer(lightTheme);
+        $map.addLayer(voyagerTheme);
+        $map.addLayer(darkTheme);
 
         let tileLayers = {
-            "Dark": darkTheme,
-            "Light": lightTheme,
-            "Voyager": voyagerTheme
-        }
+            Dark: darkTheme,
+            Light: lightTheme,
+            Voyager: voyagerTheme,
+        };
 
-        L.control.layers(tileLayers).addTo($map)
-        
+        L.control.layers(tileLayers).addTo($map);
 
-        console.log($map)
-
+        console.log($map);
     });
 
     onDestroy(async () => {
