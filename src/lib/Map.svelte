@@ -1,23 +1,62 @@
 <script lang="ts">
-    import { map, theme } from "./store";
-    import L from "leaflet";
+    import { map } from "./store";
+    import L, { type TileLayer } from "leaflet";
     import { onDestroy, onMount } from "svelte";
-
 
     let mapElement: HTMLElement;
     let initialView: L.LatLngExpression = [34.0536, -118.243]; // L.A. City Hall
 
+    let maxZoom = 20;
+    let subdomains = "abcd";
+    let attribution =                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+
     onMount(async () => {
+        let darkTheme: TileLayer = L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+            {
+                id: "Dark",
+                attribution,
+                subdomains,
+                maxZoom,
+            }
+        );
+
+        let lightTheme: TileLayer = L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            {
+                id: "Light",
+                attribution,
+                subdomains,
+                maxZoom,
+            }
+        );
+
+        let voyagerTheme: TileLayer = L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+            {
+                id: "Voyager",
+                attribution,
+                maxZoom,
+                subdomains,
+            }
+        );
+
         $map = L.map(mapElement).setView(initialView, 13);
+        $map.addLayer(darkTheme)
+        $map.addLayer(lightTheme)
+        $map.addLayer(voyagerTheme)
 
+        let tileLayers = {
+            "Dark": darkTheme,
+            "Light": lightTheme,
+            "Voyager": voyagerTheme
+        }
 
-        L.tileLayer($theme.url, {
-            maxZoom: $theme.meta.maxZoom,
-            attribution: $theme.meta.attribution,
-            subdomains: $theme.meta.subdomains,
-        })
-            .redraw()
-            .addTo($map);
+        L.control.layers(tileLayers).addTo($map)
+        
+
+        console.log($map)
+
     });
 
     onDestroy(async () => {
@@ -26,7 +65,6 @@
             $map.remove();
         }
     });
-
 </script>
 
 <div class="map" bind:this={mapElement} />
