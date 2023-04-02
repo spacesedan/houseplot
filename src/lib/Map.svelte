@@ -7,7 +7,7 @@
     let initialView: L.LatLngExpression = [34.0536, -118.243]; // L.A. City Hall
 
     let maxZoom = 20;
-    let subdomains = "abcd";
+    let subdomains = "PlotMe";
     let attribution =
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
@@ -48,14 +48,13 @@
         $map.addLayer(darkTheme);
 
         let tileLayers = {
-            Dark: darkTheme,
-            Light: lightTheme,
-            Voyager: voyagerTheme,
+            "Dark": darkTheme,
+            "Light": lightTheme,
+            "Voyager": voyagerTheme,
         };
 
         L.control.layers(tileLayers).addTo($map);
 
-        console.log($map);
     });
 
     onDestroy(async () => {
