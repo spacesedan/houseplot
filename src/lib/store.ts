@@ -1,9 +1,21 @@
 import { writable, type Writable } from "svelte/store";
-import type { Map, LatLngExpression, TileLayer } from 'leaflet'
-import type { ReverseGeoCodingResult } from "./types";
+import type { Map, TileLayer } from 'leaflet'
+import type { Plot } from "./types";
+import { browser } from "$app/environment";
 
 export const currentTheme: Writable<TileLayer> = writable()
 export const map: Writable<Map> = writable();
-export const myCoords: Writable<LatLngExpression> = writable();
-export const locationResult: Writable<ReverseGeoCodingResult> = writable();
-export const waitingForLocation: Writable<boolean> = writable(true)
+
+
+const retrievePlots = browser && localStorage.getItem('cached_plots')
+// @ts-ignore
+const parsedPlots = JSON.parse(retrievePlots)
+export const plots = writable<Plot[]>(parsedPlots === null ? [] : parsedPlots);
+
+
+plots.subscribe((value) => {
+    if (browser) {
+        window.localStorage.setItem('cached_plots', JSON.stringify(value))
+    }
+})
+

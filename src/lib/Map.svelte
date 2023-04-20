@@ -2,9 +2,8 @@
     import { map } from "./store";
     import L, { type TileLayer } from "leaflet";
     import { onDestroy, onMount } from "svelte";
-
     let mapElement: HTMLElement;
-    let initialView: L.LatLngExpression = [34.0536, -118.243]; // L.A. City Hall
+    let initialView: L.LatLngExpression = [45.5152, -122.6784]; // L.A. City Hall
 
     let maxZoom = 20;
     let subdomains = "PlotMe";
@@ -48,13 +47,12 @@
         $map.addLayer(darkTheme);
 
         let tileLayers = {
-            "Dark": darkTheme,
-            "Light": lightTheme,
-            "Voyager": voyagerTheme,
+            Dark: darkTheme,
+            Light: lightTheme,
+            Voyager: voyagerTheme,
         };
 
         L.control.layers(tileLayers).addTo($map);
-
     });
 
     onDestroy(async () => {
@@ -70,6 +68,6 @@
 <style>
     @import "leaflet/dist/leaflet.css";
     .map {
-        height: 800px;
+        height: 600px;
     }
 </style>

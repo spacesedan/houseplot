@@ -1,9 +1,14 @@
 <script lang="ts">
-    import CoordinateButton from "$lib/CoordinateButton.svelte";
     import Map from "$lib/Map.svelte";
-    import LocationResult from "$lib/LocationResult.svelte";
+    import LocationForm from "$lib/LocationForm.svelte";
+    import { plots } from "$lib/store";
+
+    console.log($plots)
+    $: cachedPlots = $plots
+    console.log(cachedPlots)
 </script>
 
-<CoordinateButton/>
-<LocationResult/>
-<Map/>
+<main class="container mx-auto">
+    <LocationForm />
+    <Map />
+</main>
