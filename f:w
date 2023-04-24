@@ -1,24 +1,22 @@
 <script lang="ts">
     import type { LatLngExpression } from "leaflet";
-    import { map, plots, createMarker } from "./store";
+    import L from "leaflet";
+    import { createRequestUrl, generatePopupContent } from "./helpers";
+    import { map, plots } from "./store";
     import type { GeoapifyResult, Plot } from "./types";
-    import { createRequestUrl } from "./helpers.js";
 
     let address: string;
     let postLink: string;
     let includeLink: boolean = false;
     let isFetching: boolean = false;
-    let error: boolean = false
 
-
-    async function submitLocation() {
+    async function addLocation() {
         // do nothing if not input
         if (!address) return;
 
         if (includeLink && !postLink) return;
 
         address.trim();
-
         // check to see if the current address is already in local storage
         const alreadyFound = $plots.find((a) => a.address === address);
         if (alreadyFound) return;
@@ -34,17 +32,18 @@
             .then((data: GeoapifyResult) => {
                 const result = data.results[0];
                 const latLng: LatLngExpression = [result.lat, result.lon];
-
                 const plot: Plot = {
                     address,
                     latLng,
                     postLink,
                 };
-
-                const marker = createMarker(plot);
                 $plots = [...$plots, plot];
-                $map.addLayer(marker);
-
+                const popupContent = generatePopupContent(plot);
+                const marker = L.marker(plot.latLng, {}).bindPopup(
+                    popupContent
+                );
+$map.addLayer(marker)
+                // reset ui
                 address = "";
                 postLink = "";
                 isFetching = false;
@@ -56,7 +55,7 @@
 <form
     action="submit"
     class="flex flex-wrap font-mono items-end justify-start gap-3 my-5 py-2 mx-auto"
-    on:submit|preventDefault={submitLocation}
+    on:submit|preventDefault={addLocation}
 >
     <label class="flex flex-col w-4/5 text-sm font-black text-gray-500">
         Address

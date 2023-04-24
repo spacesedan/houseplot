@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { map } from "./store";
+    import { map, plots, createMarker } from "./store";
     import L, { type TileLayer } from "leaflet";
     import { onDestroy, onMount } from "svelte";
     let mapElement: HTMLElement;
@@ -41,10 +41,17 @@
             }
         );
 
-        $map = L.map(mapElement).setView(initialView, 13);
+        $map = L.map(mapElement).setView(initialView, 11);
         $map.addLayer(lightTheme);
         $map.addLayer(voyagerTheme);
         $map.addLayer(darkTheme);
+
+        if ($plots.length) {
+            $plots.forEach((p) => {
+                const marker = createMarker(p)
+                $map.addLayer(marker);
+            });
+        }
 
         let tileLayers = {
             Dark: darkTheme,

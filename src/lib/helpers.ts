@@ -1,5 +1,6 @@
 import type { AddressObject } from "./types";
 
+
 // Takes the address, city, state, and zipcode and returns a link
 // that can be used to make a request to Geoapify
 export const createRequestUrl = (address: AddressObject): string => {
@@ -12,3 +13,6 @@ export const createRequestUrl = (address: AddressObject): string => {
 
     return requestUrl.toString()
 }
+
+
+

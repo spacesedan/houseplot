@@ -16,7 +16,7 @@ export type Theme = {
 export type Plot = {
     address: string,
     latLng: LatLngExpression,
-    postingLink: string
+    postLink: string
 }
 
 export type GeoapifyResult = {
